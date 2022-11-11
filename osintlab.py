@@ -5,7 +5,7 @@
 from os import system, name, path, getcwd
 import sys 
 import time
-import git
+
 
 
 def clear(): ## emerce noémie
@@ -26,6 +26,8 @@ clear()
 print("Installation des packages...\n\n\n\n\n\n\n")
 system(version+" install gitpython")
 
+
+import git
 
 
 
