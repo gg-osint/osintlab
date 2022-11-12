@@ -12,8 +12,7 @@ def clear():
 
 
 if sys.version_info[0] == 3:
-    version = "pip3"
-    
+    version = "pip3"  
 else:
     version = "pip"
 
@@ -21,9 +20,7 @@ else:
 clear()
 print("Installation des packages...\n\n\n\n\n\n\n")
 system(f"{version} install gitpython")
-
 from git import Repo
-
 data = {
    1: pseudo,
    2: email,
