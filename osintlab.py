@@ -3,7 +3,7 @@
 ALL RIGHTS ARE RESERVED TO THE /OSINT TEAM
 '''
 from os import system, name, path, getcwd
-
+import sys
 def clear():
     if name == 'nt':
         system('cls')
@@ -21,34 +21,6 @@ clear()
 print("Installation des packages...\n\n\n\n\n\n\n")
 system(f"{version} install gitpython")
 from git import Repo
-data = {
-   1: pseudo,
-   2: email,
-   3: numtel,
-   4: linkedin,
-   5: mc,
-   6: rs,
-   7: of,
-   0: tout
-}
-
-def main():
-    clear()
-    print("""
-            ____ ____ _ _  _ ___    _    ____ ___  
-            |  | [__  | |\ |  |     |    |__| |__] 
-            |__| ___] | | \|  |     |___ |  | |__] 
-
-                By Sale Gosse & Noémie - discord.gg/osint                     """)
-    
-    choix = input("Marquez le chiffre de la catégorie que vous voulez installer.\n\t[1] - Pseudo\n\t[2] - Email\n\t[3] - Numéro de téléphone\n\t[4] - Linkedin\n\t[5] - Minecraft\n\t[6] - Réseaux Sociaux\n\t[7] - Outils Français\n\t[0] - Tout")
-    for i in choix:
-        try:
-            data[int(i)]()
-        except KeyError:
-            print(f"Option invalide {i}")
-        except ValueError:
-            print(f"Nous pensions avoir un nombre et nous avons eu un texte {i}")
 
 def tout() -> None:
     for i, k in data:
@@ -95,6 +67,35 @@ def of() -> None:
     print('\n--> Les tools Français sont entrain de s\'installer, le temps va dépendre de votre connexion.')
     Repo.clone_from('https://github.com/megadose/Fl0wj0b', path.abspath(getcwd())+'/OutilsFrance/Numero/Fl0wj0b/')
     Repo.clone_from('https://github.com/daprofiler/DaProfiler', path.abspath(getcwd())+'/OutilsFrance/Global/DaProfiler/')
+data = {
+   1: pseudo,
+   2: email,
+   3: numtel,
+   4: linkedin,
+   5: mc,
+   6: rs,
+   7: of,
+   0: tout
+}
+
+def main():
+    clear()
+    print("""
+            ____ ____ _ _  _ ___    _    ____ ___  
+            |  | [__  | |\ |  |     |    |__| |__] 
+            |__| ___] | | \|  |     |___ |  | |__] 
+
+                By Sale Gosse & Noémie - discord.gg/osint                     """)
+    
+    choix = input("Marquez le chiffre de la catégorie que vous voulez installer.\n\t[1] - Pseudo\n\t[2] - Email\n\t[3] - Numéro de téléphone\n\t[4] - Linkedin\n\t[5] - Minecraft\n\t[6] - Réseaux Sociaux\n\t[7] - Outils Français\n\t[0] - Tout")
+    for i in choix:
+        try:
+            data[int(i)]()
+        except KeyError:
+            print(f"Option invalide {i}")
+        except ValueError:
+            print(f"Nous pensions avoir un nombre et nous avons eu un texte {i}")
+
     
 while True:
     main()
