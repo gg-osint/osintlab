@@ -87,7 +87,7 @@ def main():
 
                 By Sale Gosse & Noémie - discord.gg/osint                     """)
     
-    choix = input("Marquez le chiffre de la catégorie que vous voulez installer.\n\t[1] - Pseudo\n\t[2] - Email\n\t[3] - Numéro de téléphone\n\t[4] - Linkedin\n\t[5] - Minecraft\n\t[6] - Réseaux Sociaux\n\t[7] - Outils Français\n\t[0] - Tout")
+    choix = input("Marquez le chiffre de la catégorie que vous voulez installer.\n\t[1] - Pseudo\n\t[2] - Email\n\t[3] - Numéro de téléphone\n\t[4] - Linkedin\n\t[5] - Minecraft\n\t[6] - Réseaux Sociaux\n\t[7] - Outils Français\n\t[0] - Tout\n\n\n\n   ")
     for i in choix:
         try:
             data[int(i)]()
