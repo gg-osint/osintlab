@@ -1,186 +1,157 @@
 
 # Confectionné par les administrateurs de discord.gg/osint
 
+from os import system, name, getcwd
+import os.path as pathUtils
 
-from os import system, name, path, getcwd
-import sys 
-import time
+try:
+    from alive_progress import alive_bar
+    import git
+except ImportError:
+    print("Merci de faire 'pip install -r requirements.txt' avant de lancer le script!")
+    print("Si tu veux installer ces bibliothèques que pour toi, fait 'pip install -r requirements.txt --user'")
+    exit(-1)
 
 
-
-def clear(): ## emerce noémie
+def clear():  # emerce noémie
     if name == 'nt':
         system('cls')
         return
     system('clear')
 
 
-if sys.version_info[0] == 3:
-    version = "pip3"
-    
-else:
-    version = "pip"
-
-
-clear()
-print("Installation des packages...\n\n\n\n\n\n\n")
-system(version+" install gitpython")
-
-
-import git
-
-
-
-
 def main():
+    while True:
+        # Le clear déplacé en bas pour avoir les dernières logs
 
-    clear()
+        print("""
+                        ____ ____ _ _  _ ___    _    ____ ___
+                        |  | [__  | |\ |  |     |    |__| |__]
+                        |__| ___] | | \|  |     |___ |  | |__]
+                            By Sale Gosse - discord.gg/osint                     """)
 
+        # Les petits choix
+
+        choix = input("""
+    Marquez le ou les chiffres de la catégorie que vous voulez installer.
     
-    print("""
-            ____ ____ _ _  _ ___    _    ____ ___  
-            |  | [__  | |\ |  |     |    |__| |__] 
-            |__| ___] | | \|  |     |___ |  | |__] 
-
-                By Sale Gosse - discord.gg/osint                     """)
+    ex: "125" pour installer les outils Pseudo, Email et Numéro de téléphone
     
+    [1] - Pseudo
+    [2] - Email
+    [3] - Numéro de téléphone
+    [4] - Linkedin
+    [5] - Minecraft
+    [6] - Réseaux Sociaux
+    [7] - Outils Français
+    [0] - Tout
 
-    # Les petits choix
+    [x] - Quitter
+    """)
 
-    choix = input("""
- Marquez le chiffre de la catégorie que vous voulez installer.
+    # Je voulais faire un système de plusieurs choix d'un coup mais j'ai laissé ça comme ça, Noémié si tu passes par là
+    # Je passe par la, et en en faite suffisait juste de ne pas appeler main() après...
 
-[1] - Pseudo
-[2] - Email
-[3] - Numéro de téléphone
-[4] - Linkedin
-[5] - Minecraft
-[6] - Réseaux Sociaux
-[7] - Outils Français
+        clear()
+
+        if "1" in choix:
+            installPart("Pseudo")
+        if "2" in choix:
+            installPart("Email")
+        if "3" in choix:
+            installPart("Tel")
+        if "4" in choix:
+            installPart("Li")
+        if "5" in choix:
+            installPart("mc")
+        if "6" in choix:
+            installPart("Social")
+        if "7" in choix:
+            installPart("Fr")
+        if "0" in choix:
+            tout()
+        if "x" in choix:
+            return
 
 
-[0] - Tout
+CWD = getcwd()
+repos = {
+    "Pseudo": {
+        "path": "Pseudo",
+        "Sherlock": "https://github.com/sherlock-project/sherlock"
+    },
 
-                    """)
+    "Email": {
+        "path": "Email",
+        "Holehe": "https://github.com/megadose/holehe",
+        "Emdofi": "https://github.com/novitae/emdofi",
+        "GHunt": "https://github.com/mxrch/GHunt"
+    },
 
- ## Je voulais faire un système de plusieurs choix d'un coup mais j'ai laissé ça comme ça, Noémié si tu passes par là 
+    "Tel": {
+        "path": "NumeroDeTelephone",
+        "Ignorant": "https://github.com/megadose/ignorant",
+        "Phoneinfoga": "https://github.com/sundowndev/phoneinfoga"
+    },
 
-    if "1" in choix:
-        pseudo()
-    elif "2" in choix:
-        email()
-    elif "3" in choix:
-        numtel()
-    elif "4" in choix:
-        linkedin()
-    elif "5" in choix:
-        mc()
-    elif "6" in choix:
-        rs()
-    elif "7" in choix:
-        of()
-    
-    elif "0" in choix:
-        tout()
+    "Li": {
+        "path": "Linkedin",
+        "nqntnqnqmb": "https://github.com/megadose/nqntnqnqmb",
+        "Revealin": "https://github.com/mxrch/revealin"
+    },
+
+    "mc": {
+        "path": "Minecraft",
+        "Rinaorc": "https://github.com/gg-osint/rinaorc-osint"
+    },
+
+    "Social": {
+        "path": "ReseauxSociaux",
+        "Facebook/Facebook_totem": "https://github.com/megadose/facebook_totem",
+        "Instagram/toutatis": "https://github.com/megadose/toutatis",
+        "Instagram/Osintgram": "https://github.com/Datalux/Osintgram"
+    },
+
+    "Fr": {
+        "path": "OutilsFrance",
+        "Numero/Fl0wj0b": "https://github.com/megadose/Fl0wj0b",
+        "Global/DaProfiler": "https://github.com/daprofiler/DaProfiler"
+    }
+}
+
+
+def installPart(choice: str):
+    if repos.get(choice) is not None:
+        tools = repos[choice]
+        print(
+            f'\n--> Les tools {tools["path"]} sont entrain de s\'installer, le temps va dépendre de votre connexion.')
+        with alive_bar(len(tools), length=20, bar="fish") as bar:
+            bar()
+            for repo in tools:
+                if repo == "path":
+                    continue
+                path = pathUtils.join(CWD, tools["path"], repo)
+                try:
+                    _ = git.Repo.clone_from(tools[repo], path)
+                except:
+                    print(
+                        f"Une erreur est survenu sur la repo {tools[repo]}! Passé!\n\n")
+                finally:
+                    bar()
+    else:
+        print("Le choix n'existe pas! (ou alors c'est un bug...)\n\n")
+    return "\n\n"
 
 
 def tout():
-    print('\n--> Les tools Pseudo sont entrain de s\'installer, le temps va dépendre de votre connexion.')
-    git.Repo.clone_from('https://github.com/sherlock-project/sherlock', path.abspath(getcwd())+'/Pseudo/Sherlock/')
-
-    print('\n--> Les tools Email sont entrain de s\'installer, le temps va dépendre de votre connexion.')
-    git.Repo.clone_from('https://github.com/megadose/holehe', path.abspath(getcwd())+'/Email/Holehe/')
-    git.Repo.clone_from('https://github.com/novitae/emdofi', path.abspath(getcwd())+'/Email/Emdofi/')
-    git.Repo.clone_from('https://github.com/mxrch/GHunt', path.abspath(getcwd())+'/Email/GHunt/')
-
-    print('\n--> Les tools de Numéro de téléphone sont entrain de s\'installer, le temps va dépendre de votre connexion.')
-    git.Repo.clone_from('https://github.com/megadose/ignorant', path.abspath(getcwd())+'/NumeroDeTelephone/Ignorant/')
-    git.Repo.clone_from('https://github.com/sundowndev/phoneinfoga', path.abspath(getcwd())+'/NumeroDeTelephone/Phoneinfoga/')
-
-    print('\n--> Les tools Linkedin sont entrain de s\'installer, le temps va dépendre de votre connexion.')
-    git.Repo.clone_from('https://github.com/megadose/nqntnqnqmb', path.abspath(getcwd())+'/Linkedin/nqntnqnqmb/')
-    git.Repo.clone_from('https://github.com/mxrch/revealin', path.abspath(getcwd())+'/Linkedin/Revealin/')
-
-    print('\n--> Les tools Minecraft sont entrain de s\'installer, le temps va dépendre de votre connexion.')
-    git.Repo.clone_from('https://github.com/gg-osint/rinaorc-osint', path.abspath(getcwd())+'/Minecraft/Rinaorc/')
-
-    print('\n--> Les tools "Réseaux Sociaux" sont entrain de s\'installer, le temps va dépendre de votre connexion.')
-    git.Repo.clone_from('https://github.com/megadose/facebook_totem', path.abspath(getcwd())+'/ReseauxSociaux/Facebook/Facebook_totem/')
-    git.Repo.clone_from('https://github.com/megadose/toutatis', path.abspath(getcwd())+'/ReseauxSociaux/Instagram/toutatis')
-    git.Repo.clone_from('https://github.com/Datalux/Osintgram', path.abspath(getcwd())+'/ReseauxSociaux/Instagram/Osintgram')
+    j = 0
+    print("Installation de tout les outils!")
+    print(f"- {len(repos)} module{'s' if len(repos)>1 else ''}")
+    for i in repos:
+        j += 1
+        print(installPart(i))
+        print(f"Status: {j}/{len(repos)} modules installés")
 
 
-    print('\n--> Les tools Français sont entrain de s\'installer, le temps va dépendre de votre connexion.')
-    git.Repo.clone_from('https://github.com/megadose/Fl0wj0b', path.abspath(getcwd())+'/OutilsFrance/Numero/Fl0wj0b/')
-    git.Repo.clone_from('https://github.com/daprofiler/DaProfiler', path.abspath(getcwd())+'/OutilsFrance/Global/DaProfiler/')
-    
-    
-    main()
-
-
-
-def pseudo(): 
-
-
-    print('\n--> Les tools Pseudo sont entrain de s\'installer, le temps va dépendre de votre connexion.')
-    git.Repo.clone_from('https://github.com/sherlock-project/sherlock', path.abspath(getcwd())+'/Pseudo/Sherlock/')
-    main()
-    
-
-def email(): 
-
-
-    print('\n--> Les tools Email sont entrain de s\'installer, le temps va dépendre de votre connexion.')
-    git.Repo.clone_from('https://github.com/megadose/holehe', path.abspath(getcwd())+'/Email/Holehe/')
-    git.Repo.clone_from('https://github.com/novitae/emdofi', path.abspath(getcwd())+'/Email/Emdofi/')
-    git.Repo.clone_from('https://github.com/mxrch/GHunt', path.abspath(getcwd())+'/Email/GHunt/')
-    main()
-    
-
-def numtel(): 
-
-
-    print('\n--> Les tools de Numéro de téléphone sont entrain de s\'installer, le temps va dépendre de votre connexion.')
-    git.Repo.clone_from('https://github.com/megadose/ignorant', path.abspath(getcwd())+'/NumeroDeTelephone/Ignorant/')
-    git.Repo.clone_from('https://github.com/sundowndev/phoneinfoga', path.abspath(getcwd())+'/NumeroDeTelephone/Phoneinfoga/')
-    main()
-    
-
-def linkedin(): 
-
-
-    print('\n--> Les tools Linkedin sont entrain de s\'installer, le temps va dépendre de votre connexion.')
-    git.Repo.clone_from('https://github.com/megadose/nqntnqnqmb', path.abspath(getcwd())+'/Linkedin/nqntnqnqmb/')
-    git.Repo.clone_from('https://github.com/mxrch/revealin', path.abspath(getcwd())+'/Linkedin/Revealin/')
-    main()
-    
-
-def mc(): 
-
-
-    print('\n--> Les tools Minecraft sont entrain de s\'installer, le temps va dépendre de votre connexion.')
-    git.Repo.clone_from('https://github.com/gg-osint/rinaorc-osint', path.abspath(getcwd())+'/Minecraft/Rinaorc/')
-    main()
-    
-
-def rs(): 
-
-
-    print('\n--> Les tools "Réseaux Sociaux" sont entrain de s\'installer, le temps va dépendre de votre connexion.')
-    git.Repo.clone_from('https://github.com/megadose/facebook_totem', path.abspath(getcwd())+'/ReseauxSociaux/Facebook/Facebook_totem/')
-    git.Repo.clone_from('https://github.com/megadose/toutatis', path.abspath(getcwd())+'/ReseauxSociaux/Instagram/toutatis')
-    git.Repo.clone_from('https://github.com/Datalux/Osintgram', path.abspath(getcwd())+'/ReseauxSociaux/Instagram/Osintgram')
-    main()
-    
-
-def of(): 
-
-
-    print('\n--> Les tools Français sont entrain de s\'installer, le temps va dépendre de votre connexion.')
-    git.Repo.clone_from('https://github.com/megadose/Fl0wj0b', path.abspath(getcwd())+'/OutilsFrance/Numero/Fl0wj0b/')
-    git.Repo.clone_from('https://github.com/daprofiler/DaProfiler', path.abspath(getcwd())+'/OutilsFrance/Global/DaProfiler/')
-    main()
-    
-
+clear()
 main()
-
